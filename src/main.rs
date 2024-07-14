@@ -5,7 +5,7 @@ fn main() {
     // Hmm so assigning owner to a the all important args, storing on the heap initially, and 
     // probably just passing slice references around rest of the code
     let args: Vec<String> = env::args().collect();
-    let config = parse_config(&args);
+    let config = Config::new(&args);
 
     let contents = fs::read_to_string(config.file_path)
         .expect("Should have been able to read the file!");
@@ -18,9 +18,11 @@ struct Config {
     file_path: String,
 }
 
-fn parse_config(args: &Vec<String>) -> Config {
-    Config {
-        query: args[1].clone(),
-        file_path: args[2].clone(),
+impl Config {
+    fn new(args: &Vec<String>) -> Config {
+        Config {
+            query: args[1].clone(),
+            file_path: args[2].clone(),
+        }
     }
 }
