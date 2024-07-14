@@ -1,12 +1,26 @@
 use std::env;
+use std::fs;
 
 fn main() {
-    // the convention of including a function's module makes sense for the following line!
+    // Hmm so assigning owner to a the all important args, storing on the heap initially, and 
+    // probably just passing slice references around rest of the code
     let args: Vec<String> = env::args().collect();
+    let config = parse_config(&args);
 
-    let query = &args[1];
-    let file_path = &args[2];
+    let contents = fs::read_to_string(config.file_path)
+        .expect("Should have been able to read the file!");
+    
+    println!("With text:\n{contents}");
+}
 
-    dbg!(query);
-    dbg!(file_path);
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+fn parse_config(args: &Vec<String>) -> Config {
+    Config {
+        query: args[1].clone(),
+        file_path: args[2].clone(),
+    }
 }
